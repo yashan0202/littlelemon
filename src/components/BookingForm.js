@@ -1,84 +1,92 @@
 import React, { useState } from "react";
 
 const BookingForm = ({ availableTimes, dispatch, selectedDate, onDateChange }) => {
-  // State variables for the form
   const [time, setTime] = useState("");
   const [guests, setGuests] = useState(1);
   const [occasion, setOccasion] = useState("");
 
-  // Form submit handler
   const handleSubmit = (event) => {
     event.preventDefault();
-
-    // Log reservation details
-    console.log("Reservation Details:", { selectedDate, time, guests, occasion });
     alert("Reservation submitted!");
-
-    const formData = { date: selectedDate, time, guests, occasion };
-    const result = submitAPI(formData);
-
-    if (result) {
-      alert("Reservation successfully made!");
-    } else {
-      alert("Error making reservation.");
-    }
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{ display: "grid", maxWidth: "300px", gap: "20px" }}
+    <main>
+      <section aria-labelledby="booking-heading">
+        <h1 id="booking-heading">Make a Reservation</h1>
+        <form
+  onSubmit={handleSubmit}
+  style={{ display: "grid", maxWidth: "300px", gap: "20px" }}
+  aria-label="Booking form for Little Lemon Restaurant"
+>
+  <div>
+    <label htmlFor="res-date">Choose date</label>
+    <input
+      type="date"
+      id="res-date"
+      value={selectedDate}
+      onChange={onDateChange}
+      required
+      min={new Date().toISOString().split("T")[0]}
+      aria-required="true"
+    />
+  </div>
+
+  <div>
+    <label htmlFor="res-time">Choose time</label>
+    <select
+      id="res-time"
+      value={time}
+      onChange={(e) => setTime(e.target.value)}
+      required
+      aria-required="true"
     >
-      <label htmlFor="res-date">Choose date</label>
-      <input
-        type="date"
-        id="res-date"
-        value={selectedDate}
-        onChange={onDateChange}
-        required
-        min={new Date().toISOString().split("T")[0]} // Prevent past dates
-      />
+      <option value="">Select a time</option>
+      {availableTimes.map((timeOption) => (
+        <option key={timeOption} value={timeOption} aria-label={`Select time ${timeOption}`}>
+          {timeOption}
+        </option>
+      ))}
+    </select>
+  </div>
 
-      <label htmlFor="res-time">Choose time</label>
-      <select
-        id="res-time"
-        value={time}
-        onChange={(e) => setTime(e.target.value)}
-        required
-      >
-        <option value="">Select a time</option>
-        {availableTimes.map((timeOption) => (
-          <option key={timeOption} value={timeOption}>
-            {timeOption}
-          </option>
-        ))}
-      </select>
+  <div>
+    <label htmlFor="guests">Number of guests</label>
+    <input
+      type="number"
+      id="guests"
+      value={guests}
+      onChange={(e) => setGuests(e.target.value)}
+      min="1"
+      max="10"
+      required
+      aria-required="true"
+      aria-label="Enter the number of guests"
+    />
+  </div>
 
-      <label htmlFor="guests">Number of guests</label>
-      <input
-        type="number"
-        id="guests"
-        value={guests}
-        onChange={(e) => setGuests(e.target.value)}
-        min="1"
-        max="10"
-        required
-      />
+  <div>
+    <label htmlFor="occasion">Occasion</label>
+    <select
+      id="occasion"
+      value={occasion}
+      onChange={(e) => setOccasion(e.target.value)}
+      required
+      aria-required="true"
+    >
+      <option value="">Select an occasion</option>
+      <option value="Birthday" aria-label="Birthday Occasion">Birthday</option>
+      <option value="Anniversary" aria-label="Anniversary Occasion">Anniversary</option>
+    </select>
+  </div>
 
-      <label htmlFor="occasion">Occasion</label>
-      <select
-        id="occasion"
-        value={occasion}
-        onChange={(e) => setOccasion(e.target.value)}
-        required
-      >
-        <option value="">Select an occasion</option>
-        <option value="Birthday">Birthday</option>
-        <option value="Anniversary">Anniversary</option>
-      </select>
+  <button type="submit" aria-label="Submit reservation form">
+    Make Your Reservation
+  </button>
+</form>
 
-      <button type="submit">Make Your Reservation</button>
-    </form>
+      </section>
+    </main>
   );
 };
 
