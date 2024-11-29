@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const BookingForm = ({ availableTimes, selectedDate, onDateChange, onSubmit }) => {
+const BookingForm = ({ availableTimes, dispatch, selectedDate, onDateChange }) => {
   // State variables for the form
   const [time, setTime] = useState("");
   const [guests, setGuests] = useState(1);
@@ -9,13 +9,19 @@ const BookingForm = ({ availableTimes, selectedDate, onDateChange, onSubmit }) =
   // Form submit handler
   const handleSubmit = (event) => {
     event.preventDefault();
-    const formData = {
-      date: selectedDate,
-      time,
-      guests,
-      occasion,
-    };
-    onSubmit(formData); // Call the submit handler passed via props
+
+    // Log reservation details
+    console.log("Reservation Details:", { selectedDate, time, guests, occasion });
+    alert("Reservation submitted!");
+
+    const formData = { date: selectedDate, time, guests, occasion };
+    const result = submitAPI(formData);
+
+    if (result) {
+      alert("Reservation successfully made!");
+    } else {
+      alert("Error making reservation.");
+    }
   };
 
   return (
@@ -30,6 +36,7 @@ const BookingForm = ({ availableTimes, selectedDate, onDateChange, onSubmit }) =
         value={selectedDate}
         onChange={onDateChange}
         required
+        min={new Date().toISOString().split("T")[0]} // Prevent past dates
       />
 
       <label htmlFor="res-time">Choose time</label>
