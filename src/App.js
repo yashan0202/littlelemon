@@ -1,24 +1,27 @@
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import BookingPage from "./components/BookingPage";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import AppRouter from "./routes/Router";
 
-import './App.css';
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <React.StrictMode>
+    <AppRouter />
+  </React.StrictMode>
+);
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <nav>
+        <a href="/booking">Book a Table</a>
+      </nav>
+      <Routes>
+        <Route path="/booking" element={<BookingPage />} />
+      </Routes>
+    </Router>
   );
 }
 
