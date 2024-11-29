@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const BookingForm = ({ availableTimes, dispatch, selectedDate, onDateChange }) => {
+const BookingForm = ({ availableTimes, selectedDate, onDateChange, onSubmit }) => {
   // State variables for the form
   const [time, setTime] = useState("");
   const [guests, setGuests] = useState(1);
@@ -9,21 +9,13 @@ const BookingForm = ({ availableTimes, dispatch, selectedDate, onDateChange }) =
   // Form submit handler
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("Reservation Details:", { selectedDate, time, guests, occasion });
-    alert("Reservation submitted!");
-    // Optionally, submit the form to the API using submitAPI
     const formData = {
       date: selectedDate,
       time,
       guests,
       occasion,
     };
-    const result = submitAPI(formData);
-    if (result) {
-      alert("Reservation successfully made!");
-    } else {
-      alert("Error making reservation.");
-    }
+    onSubmit(formData); // Call the submit handler passed via props
   };
 
   return (

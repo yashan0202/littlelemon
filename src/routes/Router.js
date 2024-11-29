@@ -1,6 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import Main from "./Main";
 import BookingPage from "../components/BookingPage";
+import ConfirmedBooking from "../components/ConfirmedBooking";
 
 const AppRouter = () => {
   return (
@@ -22,6 +24,8 @@ const AppRouter = () => {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/booking" element={<BookingPage />} />
+        <Route path="/confirmed" element={<ConfirmedBooking />} />
+        <Route path="/main" element={<Main />} />
       </Routes>
     </Router>
   );

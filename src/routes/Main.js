@@ -1,6 +1,7 @@
 import React, { useState, useReducer, useEffect } from "react";
-import BookingForm from "../components/BookingForm";  // Adjust based on your actual file structure
-
+import BookingForm from "../components/BookingForm";
+import { useNavigate } from "react-router-dom";
+import { fetchAPI, submitAPI } from "../utils/api";
 
 // Reducer function for managing available times
 const availableTimesReducer = (state, action) => {
@@ -17,11 +18,11 @@ const availableTimesReducer = (state, action) => {
 const Main = () => {
   const [availableTimes, dispatch] = useReducer(availableTimesReducer, []);
   const [selectedDate, setSelectedDate] = useState("");
+  const navigate = useNavigate();
 
   // Fetch available times based on selected date
   const updateTimes = (date) => {
     if (date) {
-      // Fetch available times from API
       const times = fetchAPI(date); // API call to fetch available times
       dispatch({ type: "UPDATE_TIMES", payload: times });
     } else {
@@ -43,13 +44,23 @@ const Main = () => {
     updateTimes(newDate); // Update available times based on the new date
   };
 
+  // Handle form submission and navigate to the confirmation page on success
+  const handleFormSubmit = (formData) => {
+    const result = submitAPI(formData);
+    if (result) {
+      navigate("/confirmed"); // Navigate to the confirmation page
+    } else {
+      alert("Error making reservation. Please try again.");
+    }
+  };
+
   return (
     <div>
       <BookingForm
         availableTimes={availableTimes}
-        dispatch={dispatch}
         selectedDate={selectedDate}
         onDateChange={handleDateChange}
+        onSubmit={handleFormSubmit}
       />
     </div>
   );
