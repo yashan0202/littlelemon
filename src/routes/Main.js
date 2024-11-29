@@ -23,16 +23,16 @@ const Main = () => {
   // Fetch available times based on selected date
   const updateTimes = (date) => {
     if (date) {
-      const times = fetchAPI(date); // API call to fetch available times
+      const times = fetchAPI(date); // Mock API call to fetch available times
       dispatch({ type: "UPDATE_TIMES", payload: times });
     } else {
       dispatch({ type: "RESET_TIMES" });
     }
   };
 
-  // Initialize available times when component loads
+  // Initialize available times when the component loads
   useEffect(() => {
-    const today = new Date().toISOString().split("T")[0]; // Get today's date
+    const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
     setSelectedDate(today);
     updateTimes(today);
   }, []);
@@ -41,12 +41,12 @@ const Main = () => {
   const handleDateChange = (e) => {
     const newDate = e.target.value;
     setSelectedDate(newDate);
-    updateTimes(newDate); // Update available times based on the new date
+    updateTimes(newDate); // Fetch available times for the selected date
   };
 
   // Handle form submission and navigate to the confirmation page on success
   const handleFormSubmit = (formData) => {
-    const result = submitAPI(formData);
+    const result = submitAPI(formData); // Mock API call to submit booking data
     if (result) {
       navigate("/confirmed"); // Navigate to the confirmation page
     } else {
@@ -55,14 +55,18 @@ const Main = () => {
   };
 
   return (
-    <div>
+    <main style={{ padding: "20px", textAlign: "center" }}>
+      <h1 style={{ color: "#495E57" }}>Book Your Table</h1>
+      <p style={{ marginBottom: "20px", color: "#333" }}>
+        Reserve your table for an unforgettable dining experience.
+      </p>
       <BookingForm
         availableTimes={availableTimes}
         selectedDate={selectedDate}
         onDateChange={handleDateChange}
         onSubmit={handleFormSubmit}
       />
-    </div>
+    </main>
   );
 };
 
