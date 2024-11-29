@@ -1,25 +1,24 @@
 import React, { useState } from "react";
 
-const BookingForm = () => {
+const BookingForm = ({ availableTimes, dispatch }) => {
   // State variables
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [guests, setGuests] = useState(1);
   const [occasion, setOccasion] = useState("");
-  const [availableTimes, setAvailableTimes] = useState([
-    "17:00",
-    "18:00",
-    "19:00",
-    "20:00",
-    "21:00",
-    "22:00",
-  ]);
 
   // Form submit handler
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log("Reservation Details:", { date, time, guests, occasion });
     alert("Reservation submitted!");
+  };
+
+  // Date change handler to dispatch the action
+  const handleDateChange = (e) => {
+    const selectedDate = e.target.value;
+    setDate(selectedDate);
+    dispatch({ type: "UPDATE_DATE", payload: selectedDate });
   };
 
   return (
@@ -32,7 +31,7 @@ const BookingForm = () => {
         type="date"
         id="res-date"
         value={date}
-        onChange={(e) => setDate(e.target.value)}
+        onChange={handleDateChange}
         required
       />
 
