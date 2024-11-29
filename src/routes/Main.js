@@ -1,32 +1,56 @@
-import React, { useReducer } from "react";
-import BookingPage from "../components/BookingPage";
+import React, { useState, useReducer, useEffect } from "react";
+import BookingForm from "../components/BookingForm";  // Adjust based on your actual file structure
 
-// Function to initialize available times
-const initializeTimes = () => [
-  "17:00",
-  "18:00",
-  "19:00",
-  "20:00",
-  "21:00",
-  "22:00",
-];
 
-// Reducer function to handle state changes
-const updateTimes = (state, action) => {
+// Reducer function for managing available times
+const availableTimesReducer = (state, action) => {
   switch (action.type) {
-    case "UPDATE_DATE":
-      return initializeTimes(); // Placeholder logic for now
+    case "UPDATE_TIMES":
+      return action.payload; // Update available times based on selected date
+    case "RESET_TIMES":
+      return []; // Reset available times
     default:
       return state;
   }
 };
 
 const Main = () => {
-  const [availableTimes, dispatch] = useReducer(updateTimes, initializeTimes());
+  const [availableTimes, dispatch] = useReducer(availableTimesReducer, []);
+  const [selectedDate, setSelectedDate] = useState("");
+
+  // Fetch available times based on selected date
+  const updateTimes = (date) => {
+    if (date) {
+      // Fetch available times from API
+      const times = fetchAPI(date); // API call to fetch available times
+      dispatch({ type: "UPDATE_TIMES", payload: times });
+    } else {
+      dispatch({ type: "RESET_TIMES" });
+    }
+  };
+
+  // Initialize available times when component loads
+  useEffect(() => {
+    const today = new Date().toISOString().split("T")[0]; // Get today's date
+    setSelectedDate(today);
+    updateTimes(today);
+  }, []);
+
+  // Handle date selection
+  const handleDateChange = (e) => {
+    const newDate = e.target.value;
+    setSelectedDate(newDate);
+    updateTimes(newDate); // Update available times based on the new date
+  };
 
   return (
     <div>
-      <BookingPage availableTimes={availableTimes} dispatch={dispatch} />
+      <BookingForm
+        availableTimes={availableTimes}
+        dispatch={dispatch}
+        selectedDate={selectedDate}
+        onDateChange={handleDateChange}
+      />
     </div>
   );
 };
